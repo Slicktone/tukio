@@ -150,8 +150,12 @@ class UserHomePage extends React.Component {
           </div>
           <div className="buy" onClick={this.displayModal}>Commit to buy</div>
           {/*place holder for displaying map*/}
-          <div className = "mapAPI">
-            Map goes here
+
+        <div className="mapAPI">
+            Space for the map! Inline styling for now :)
+              <div style={{width:300, height:600, background:'red'}}>
+                <Map center={location} markers={markers} />
+              </div>
           </div>
 
           <div id="commitModal" className="modal">
