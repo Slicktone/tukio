@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import logo from '../../public/assets/img/logo.png';
 import Signup from './Signup.jsx';
 import axios from 'axios';
+import Map from './Map.jsx'
 
 
 
@@ -45,6 +46,10 @@ class Home extends React.Component {
   searchEvents(event){
     event.preventDefault();
 
+    console.log("========== SEARCH EVENT FUNCTION ===========");
+    console.log(this);
+
+    let self = this;
     return axios({
       method: 'POST',
       url: '/search',
@@ -59,6 +64,13 @@ class Home extends React.Component {
          responseArray.push(response.data.events.event[i]);
        }
        console.log(responseArray);
+
+  // CHECK THIS SHIT OUT
+       console.log(this);
+       self.setState ({
+         searchResults: responseArray
+       })
+
      }).catch(function(error){
        console.log(error);
      });
@@ -81,15 +93,22 @@ class Home extends React.Component {
         lat: 40.7575285,
         lng: -73.9884469
     }
-      // this will place a static pin marker
-    const markers = [
-      {
-        location: {
-          lat: 40.7575285,
-          lng: -73.9884469
+    console.log(this.state.searchResults);
+    let markers = [];
+    console.log("======== inside render function ========");
+    // loop through search results and make a marker for each
+      this.state.searchResults.forEach(function(result) {
+        console.log(result);
+
+        let marker = {
+          lat: result.lat,
+          lng: result.lng
         }
-      }
-    ]
+        console.log(marker);
+        
+        markers.push(marker);
+
+      })
 
     return (
       <div className="home-content">
@@ -148,7 +167,7 @@ class Home extends React.Component {
                   <input type="text" value={this.state.searchRadius} className="form-control" name="searchRadius" placeholder="miles" onChange={this.handleInputChange}/>
                 </div>
                 <br/>
-                <input type="submit" onClick={this.searchEvents} className="search-button" value="Search Events" />
+                <input type="submit" onClick={this.searchEvents.bind(this)} className="search-button" value="Search Events" />
               </form>
             </div>
           </div>
@@ -169,9 +188,9 @@ class Home extends React.Component {
           </div>
           
           {/*place holder for displaying map*/}
-          <div className = "mapAPI">
-            Space for the map! Inline styling for now :)
-              <div style={{width:300, height:600, background:'red'}}>
+          <div className="mapAPI">
+            Space for the map! Inline styling for now
+              <div style={{width:500, height:500}}>
                 <Map center={location} markers={markers} />
               </div>
           </div>
